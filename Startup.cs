@@ -15,25 +15,19 @@ using Shop.Data.Repository;
 
 namespace Shop {
     public class Startup {
-        public Startup(IConfiguration configuration) {
-            Configuration = configuration;
-        }
 
         IConfigurationRoot _confString;
         public Startup(IHostingEnvironment hostEnv) {
-            _confString = new ConfigurationBuilder().SetBasePath(hostEnv.ContentRootPath).AddJsonFile("dbsettings.json").Build();
-
+            _confString = new ConfigurationBuilder().SetBasePath(hostEnv.ContentRootPath).AddJsonFile("dbsettings.json").Build();        
         }
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             //services.AddRazorPages();
-            services.AddDbContext<AppDBContent>(options => options.UseSqlServer(_confString.GetConnectionString("DefaultConnection")));
             services.AddTransient<IAllCars, CarRepository>();
             services.AddTransient<ICarsCategory, CategoryRepository>();
             services.AddMvc();
             services.AddMvc(option => option.EnableEndpointRouting = false);
+            services.AddDbContext<AppDbContext>(x => x.UseSqlServer("DefaultConnection"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +36,12 @@ namespace Shop {
             app.UseStatusCodePages();
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
-        }
+
+            using (var scope = app.ApplicationServices.CreateScope()) {
+                AppDbContext content = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                DbObjects.Inintial(content);
+            }
+
+        }   
     }
 }

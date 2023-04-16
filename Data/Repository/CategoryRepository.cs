@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace Shop.Data.Repository {
     public class CategoryRepository: ICarsCategory {
 
-        readonly AppDBContent appDBContent;
+        readonly AppDbContext appDbContext;
 
-        public CategoryRepository(AppDBContent appDBContent) {
-            this.appDBContent = appDBContent;
+        public CategoryRepository(AppDbContext appDBContext) {
+            this.appDbContext = appDBContext;
         }
-        public IEnumerable<Category> AllCategories => appDBContent.Category;
+        public IEnumerable<Category> AllCategories => appDbContext.Category;
     }
 }

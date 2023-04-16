@@ -9,6 +9,6 @@ namespace Shop.Data.Models {
         public string CategoryName { get; set; }
         public string Desc { get; set; }
 
-        public List<Car> Cars { get; set; } 
+        public List<Car> Cars { get; set; }  
     }
 }

@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace Shop.Data.Repository {
     public class CarRepository: IAllCars {
-        readonly AppDBContent appDBContent;
+        readonly AppDbContext appDbContext;
 
-        public CarRepository(AppDBContent appDBContent) {
-            this.appDBContent = appDBContent;
+        public CarRepository(AppDbContext appDbContext) {
+            this.appDbContext = appDbContext;
         }
-        public IEnumerable<Car> Cars => appDBContent.Car.Include(c => c.Category);
+        public IEnumerable<Car> Cars => appDbContext.Car.Include(c => c.Category);
 
-        public IEnumerable<Car> GetFavCars => appDBContent.Car.Where(p => p.IsFavorite).Include(c=>c.Category);
+        public IEnumerable<Car> GetFavCars => appDbContext.Car.Where(p => p.IsFavorite).Include(c=>c.Category);
 
-        public Car GetObjectCar(int carId) => appDBContent.Car.FirstOrDefault(p => p.Id == carId);
+        public Car GetObjectCar(int carId) => appDbContext.Car.FirstOrDefault(p => p.Id == carId);
 
         
     }
